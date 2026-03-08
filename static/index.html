@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Community Call</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#1e293b" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="CommCall" />
+  <link rel="apple-touch-icon" href="/static/icons/icon.svg" />
+
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+<!-- ============================================================
+     SIDEBAR NAVIGATION
+     ============================================================ -->
+<!-- Mobile sidebar overlay backdrop -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-brand" ondblclick="hardRefresh()" title="Double-click to clear cache &amp; refresh">
+    <div class="brand-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+      </svg>
+    </div>
+    <div>
+      <div class="brand-name">Community Call</div>
+      <div class="brand-sub">Life Safety System</div>
+    </div>
+  </div>
+
+  <nav class="nav-links">
+    <a class="nav-link active" data-page="dashboard" onclick="showPage('dashboard')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </a>
+    <a class="nav-link" data-page="history" onclick="showPage('history')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Call History
+    </a>
+    <a class="nav-link" data-page="messages" onclick="showPage('messages')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Messages
+    </a>
+    <a class="nav-link" data-page="devices" onclick="showPage('devices')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      Devices
+    </a>
+    <a class="nav-link" data-page="apartments" onclick="showPage('apartments')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 4H6a2 2 0 0 0-2 2v14"/><path d="M20 20H4"/><path d="M13 20V4l7 4v12"/><rect x="14.5" y="11" width="3" height="3" rx=".5"/></svg>
+      Apartments
+    </a>
+    <a class="nav-link" data-page="areas" onclick="showPage('areas')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Areas
+    </a>
+    <a class="nav-link" data-page="roam-alert" onclick="showPage('roam-alert')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Wander Management
+    </a>
+    <a class="nav-link" data-page="settings" onclick="showPage('settings')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Settings
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="ws-status" id="wsStatus">
+      <span class="ws-dot disconnected" id="wsDot"></span>
+      <span id="wsLabel">Connecting…</span>
+    </div>
+    <div class="sidebar-user hidden" id="sidebarUser">
+      <span id="sidebarUsername"></span>
+      <button type="button" class="btn-logout" onclick="logout()" title="Log out">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================================================
+     MAIN CONTENT
+     ============================================================ -->
+<main class="main">
+
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button type="button" class="burger" onclick="openSidebar()" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+          <line x1="3" y1="6"  x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+      <h1 class="page-title" id="pageTitle">Dashboard</h1>
+    </div>
+    <div class="topbar-right">
+      <div class="stat-pill" id="activePill">
+        <span class="stat-num" id="activeCount">0</span>
+        <span class="stat-label">Active</span>
+      </div>
+      <div class="stat-pill ack">
+        <span class="stat-num" id="ackCount">0</span>
+        <span class="stat-label">Acknowledged</span>
+      </div>
+      <button type="button" id="notifBtn" class="btn-notif hidden" onclick="togglePushNotifications()" title="Enable push notifications">
+        <svg id="notifIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+      <button type="button" id="staffEmergencyBtn" class="btn-staff-emergency hidden" onclick="showEmergencyModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span class="stat-label">Staff Emergency</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Staff Emergency Banner (shown to all clients on receipt) -->
+  <div id="emergencyBanner" class="emergency-banner hidden">
+    <div class="emergency-banner-inner">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="20" height="20"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <div class="emergency-banner-text">
+        <strong>STAFF EMERGENCY</strong>
+        <span id="emergencyBannerBody"></span>
+      </div>
+      <button type="button" class="emergency-banner-close" onclick="dismissEmergencyBanner()">&#10005;</button>
+    </div>
+  </div>
+
+  <!-- ======================== DASHBOARD PAGE ======================== -->
+  <section class="page" id="page-dashboard">
+    <div class="section-header">
+      <h2>Active Calls</h2>
+      <span class="badge" id="activeCallsBadge">0</span>
+    </div>
+
+    <div class="calls-grid" id="activeCallsGrid">
+      <div class="empty-state" id="noActiveCalls">
+        <div class="empty-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37a2 2 0 0 1 1.95-2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <p>No active calls</p>
+        <span>System monitoring — all clear</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================== HISTORY PAGE ======================== -->
+  <section class="page hidden" id="page-history">
+    <div class="section-header">
+      <h2>Call History</h2>
+      <div class="filter-row">
+        <select id="historyFilter" onchange="loadHistory()">
+          <option value="all">All Calls</option>
+          <option value="cleared">Cleared</option>
+          <option value="active">Active</option>
+          <option value="acknowledged">Acknowledged</option>
+        </select>
+        <button class="btn-secondary" onclick="loadHistory()">Refresh</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table" id="historyTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Device</th>
+            <th>Location</th>
+            <th>Priority</th>
+            <th>Called</th>
+            <th>Acknowledged</th>
+            <th>Cleared</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="historyBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ======================== DEVICES PAGE ======================== -->
+  <section class="page hidden" id="page-devices">
+    <div class="section-header">
+      <h2>Registered Devices</h2>
+      <button class="btn-primary" onclick="openDeviceModal()">+ Add Device</button>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table" id="devicesTable">
+        <thead>
+          <tr>
+            <th>Device ID</th>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Type</th>
+            <th>Vendor</th>
+            <th>Priority</th>
+            <th>Last Seen</th>
+            <th>Active</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="devicesBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ======================== APARTMENTS PAGE ======================== -->
+  <section class="page hidden" id="page-apartments">
+    <div class="section-header">
+      <h2>Apartments</h2>
+      <button type="button" class="btn-primary" onclick="openApartmentModal()">+ Add Apartment</button>
+    </div>
+    <div id="apartmentsList" class="config-cards"></div>
+  </section>
+
+  <!-- ======================== AREAS PAGE ======================== -->
+  <section class="page hidden" id="page-areas">
+    <div class="section-header">
+      <h2>Areas</h2>
+      <button type="button" class="btn-primary" onclick="openAreaModal()">+ Add Area</button>
+    </div>
+    <div id="areasList" class="config-cards"></div>
+  </section>
+
+  <!-- Add Repeater Modal -->
+  <div class="modal-overlay hidden" id="repeaterModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Add Repeater</h2>
+        <button type="button" class="modal-close" onclick="closeRepeaterModal()">✕</button>
+      </div>
+      <form onsubmit="submitAddRepeater(event)">
+        <div class="form-row">
+          <label>Serial Number</label>
+          <div class="input-with-btn">
+            <input type="text" id="repSerial" placeholder="e.g. 8222943" required />
+            <button type="button" id="btnRepDetect" class="btn-secondary" onclick="startRepeaterLearnMode()">Auto-Detect</button>
+          </div>
+          <div id="repLearnStatus" class="learn-status hidden">
+            <span class="learn-spinner"></span>
+            <span id="repLearnText">Waiting — activate the repeater now…</span>
+            <button type="button" class="btn-sm btn-secondary" onclick="stopRepeaterLearnMode()">Cancel</button>
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Name (optional)</label>
+          <input type="text" id="repName" placeholder="e.g. North Wing Repeater" />
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" onclick="closeRepeaterModal()">Cancel</button>
+          <button type="submit" class="btn-primary">Add Repeater</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================== WANDER MANAGEMENT PAGE ======================== -->
+  <section class="page hidden" id="page-roam-alert">
+
+    <!-- Sub-tab switcher -->
+    <div class="wander-tabs">
+      <button type="button" class="wtab active" id="wtab-ra" onclick="showWanderTab('ra')">Roam Alert</button>
+      <button type="button" class="wtab" id="wtab-ale" onclick="showWanderTab('ale')">AeroScout WanderGuard Blue</button>
+    </div>
+
+    <!-- ── Roam Alert sub-panel ── -->
+    <div id="wander-panel-ra">
+      <div class="section-header wander-subheader">
+        <h2>Roam Alert — WanderGuard</h2>
+        <button type="button" class="btn-secondary" onclick="loadRoamAlertPage()">Refresh</button>
+      </div>
+
+      <!-- Door status chips -->
+      <p class="ra-door-section-title">Door Status</p>
+      <div class="ra-door-grid" id="raDoorGrid">
+        <p class="hint">No door controllers configured.</p>
+      </div>
+
+      <!-- Live event feed -->
+      <div class="ra-subsection-header">
+        <p class="ra-subsection-title">Recent Events</p>
+        <button type="button" class="btn-sm btn-secondary" onclick="clearRaEvents()">Clear Log</button>
+      </div>
+      <div class="ra-event-feed" id="raEventFeed">
+        <p class="hint ra-hint-pad">No events yet.</p>
+      </div>
+    </div>
+
+    <!-- ── AeroScout / WanderGuard Blue sub-panel ── -->
+    <div id="wander-panel-ale" class="hidden">
+      <div class="section-header wander-subheader">
+        <h2>WanderGuard Blue — Controllers &amp; Tags</h2>
+        <div class="ale-status-row">
+          <span class="ale-status-badge" id="aleStatusBadge">Disconnected</span>
+          <button type="button" class="btn-secondary" onclick="loadAlePanel()">Refresh</button>
+        </div>
+      </div>
+
+      <!-- Controllers -->
+      <p class="ra-door-section-title">Door Controllers</p>
+      <div class="ale-controller-grid" id="aleControllerGrid">
+        <p class="hint ra-hint-pad">No controllers discovered yet. Ensure AeroScout is connected and devices are online.</p>
+      </div>
+
+      <!-- Tags -->
+      <div class="ra-subsection-header" style="margin-top:1.5rem">
+        <p class="ra-subsection-title">Wander Tags</p>
+        <button type="button" class="btn-sm btn-secondary" onclick="openAleTagModal()">+ Add / Pre-seed Tag</button>
+      </div>
+      <div class="table-wrap" style="margin-top:.5rem">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>MAC</th>
+              <th>Strap Address</th>
+              <th>Resident</th>
+              <th>Last Seen</th>
+              <th>Zone / Map</th>
+              <th>Battery</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="aleTagBody">
+            <tr><td colspan="7" class="hint" style="text-align:center;padding:1rem">No tags discovered yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ======================== SETTINGS PAGE ======================== -->
+  <section class="page hidden" id="page-settings">
+    <div class="settings-tabs">
+      <button type="button" class="stab" onclick="showSettingsTab('innovonics')">Innovonics</button>
+      <button type="button" class="stab active" onclick="showSettingsTab('smtp')">Notifications</button>
+      <button type="button" class="stab" onclick="showSettingsTab('pagers')">Pagers</button>
+      <button type="button" class="stab" onclick="showSettingsTab('relays')">Relays</button>
+      <button type="button" class="stab" onclick="showSettingsTab('inputs')">Inputs</button>
+      <button type="button" class="stab" onclick="showSettingsTab('rules')">Alert Rules</button>
+      <button type="button" class="stab" onclick="showSettingsTab('roamalert')">Wander</button>
+      <button type="button" class="stab" onclick="showSettingsTab('users')">Users</button>
+    </div>
+
+    <!-- SMTP -->
+    <div class="settings-panel" id="stab-smtp">
+      <h3>SMTP / Email Settings</h3>
+      <form class="settings-form" onsubmit="saveSMTP(event)">
+        <div class="form-row">
+          <label>Server</label>
+          <input type="text" id="smtpServer" placeholder="smtp.example.com" />
+        </div>
+        <div class="form-row">
+          <label>Port</label>
+          <input type="number" id="smtpPort" value="587" />
+        </div>
+        <div class="form-row">
+          <label>From Email</label>
+          <input type="email" id="smtpEmail" placeholder="alerts@hospital.com" />
+        </div>
+        <div class="form-row">
+          <label>Password</label>
+          <input type="password" id="smtpPassword" />
+        </div>
+        <div class="form-row">
+          <label>Encryption</label>
+          <select id="smtpEncryption">
+            <option value="STARTTLS">STARTTLS</option>
+            <option value="SSL">SSL</option>
+            <option value="NONE">None</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Enabled</label>
+          <input type="checkbox" id="smtpEnabled" />
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Save SMTP</button>
+          <button type="button" class="btn-secondary" onclick="testSMTP()">Send Test Email</button>
+        </div>
+      </form>
+
+      <hr style="margin:1.5rem 0;border:none;border-top:1px solid var(--border)" />
+
+      <h3>Telegram Bot</h3>
+      <p class="hint" style="margin-bottom:.75rem">Create a bot with @BotFather, then send a message to it and use @userinfobot to find your Chat ID.</p>
+      <form class="settings-form" onsubmit="saveTelegram(event)">
+        <div class="form-row">
+          <label>Bot Token</label>
+          <input type="password" id="telegramBotToken" placeholder="123456:ABC-DEF…" autocomplete="new-password" />
+        </div>
+        <div class="form-row">
+          <label>Default Chat ID</label>
+          <input type="text" id="telegramChatId" placeholder="-1001234567890 or @channel" />
+        </div>
+        <div class="form-row">
+          <label>Enabled</label>
+          <input type="checkbox" id="telegramEnabled" />
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Save Telegram</button>
+          <button type="button" class="btn-secondary" onclick="testTelegram()">Send Test Message</button>
+        </div>
+      </form>
+
+      <hr style="margin:1.5rem 0;border:none;border-top:1px solid var(--border)" />
+
+      <h3>Twilio SMS</h3>
+      <p class="hint" style="margin-bottom:.75rem">Requires a Twilio account with an active phone number. Auth token is write-only and is never returned by the server.</p>
+      <form class="settings-form" onsubmit="saveTwilio(event)">
+        <div class="form-row">
+          <label>Account SID</label>
+          <input type="text" id="twilioAccountSid" placeholder="ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" />
+        </div>
+        <div class="form-row">
+          <label>Auth Token</label>
+          <input type="password" id="twilioAuthToken" placeholder="Enter to update…" autocomplete="new-password" />
+        </div>
+        <div class="form-row">
+          <label>From Number</label>
+          <input type="text" id="twilioFromNumber" placeholder="+15551234567" />
+        </div>
+        <div class="form-row">
+          <label>Default To Number</label>
+          <input type="text" id="twilioToNumber" placeholder="+15559876543" />
+        </div>
+        <div class="form-row">
+          <label>Enabled</label>
+          <input type="checkbox" id="twilioEnabled" />
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Save Twilio</button>
+          <button type="button" class="btn-secondary" onclick="testTwilio()">Send Test SMS</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Pagers -->
+    <div class="settings-panel hidden" id="stab-pagers">
+      <div class="section-header">
+        <h3>Pager Endpoints</h3>
+        <button class="btn-primary" onclick="openPagerModal()">+ Add Pager</button>
+      </div>
+      <div id="pagersList" class="config-cards"></div>
+    </div>
+
+    <!-- Relays -->
+    <div class="settings-panel hidden" id="stab-relays">
+      <div class="section-header">
+        <h3>Relay Controllers</h3>
+        <button class="btn-primary" onclick="openRelayModal()">+ Add Controller</button>
+      </div>
+      <div id="relaysList" class="config-cards"></div>
+    </div>
+
+    <!-- Inputs -->
+    <div class="settings-panel hidden" id="stab-inputs">
+      <div class="section-header">
+        <h3>ESP Input Triggers</h3>
+        <div style="display:flex;gap:.5rem">
+          <button class="btn-secondary" onclick="openModal('inputBatchModal')">Batch Add</button>
+          <button class="btn-primary" onclick="openInputModal()">+ Add Input</button>
+        </div>
+      </div>
+      <p class="hint">
+        Inputs are polled directly by the nurse-call server. Webhook mode via <code>/api/settings/inputs/event</code> is still available if needed.
+      </p>
+      <div id="inputsList" class="config-cards"></div>
+    </div>
+
+    <!-- Innovonics Coordinator Hub -->
+    <div class="settings-panel hidden" id="stab-innovonics">
+      <div class="monitor-status-row" style="margin-bottom:1rem">
+        <div class="monitor-status-pill" id="monStatusPill">
+          <span class="ws-dot disconnected" id="monDot"></span>
+          <span id="monStatusLabel">Coordinator: Unknown</span>
+        </div>
+      </div>
+
+      <div class="settings-tabs" style="margin-bottom:1rem">
+        <button type="button" class="stab active" onclick="showCoordTab('conn')">Connection</button>
+        <button type="button" class="stab" onclick="showCoordTab('repeaters')">Repeaters</button>
+        <button type="button" class="stab" onclick="showCoordTab('monitor')">Monitor</button>
+      </div>
+
+      <!-- Connection sub-tab -->
+      <div id="ctab-conn">
+        <form class="settings-form" onsubmit="saveInno(event)">
+          <div class="form-row">
+            <label>Mode</label>
+            <select id="innoMode" onchange="toggleInnoMode()">
+              <option value="tcp">TCP / Network</option>
+              <option value="serial">Serial Port</option>
+            </select>
+          </div>
+          <div id="innoTcpFields">
+            <div class="form-row">
+              <label>Host / IP</label>
+              <input type="text" id="innoHost" placeholder="192.168.1.50" />
+            </div>
+            <div class="form-row">
+              <label>Port</label>
+              <input type="number" id="innoPort" value="3000" placeholder="3000" />
+            </div>
+          </div>
+          <div id="innoSerialFields" class="hidden">
+            <div class="form-row">
+              <label>Serial Port</label>
+              <input type="text" id="innoSerial" placeholder="/dev/ttyUSB0 or COM3" />
+            </div>
+            <div class="form-row">
+              <label>Baud Rate</label>
+              <input type="number" id="innoBaud" value="9600" placeholder="9600" />
+            </div>
+          </div>
+          <div class="form-row">
+            <label>Network ID (NID)</label>
+            <input type="number" id="innoNid" value="16" min="1" max="31" placeholder="16" />
+          </div>
+          <div class="form-row">
+            <label>Enabled</label>
+            <input type="checkbox" id="innoEnabled" />
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Save</button>
+          </div>
+          <p class="hint">Changes take effect after server restart.</p>
+        </form>
+      </div>
+
+      <!-- Repeaters sub-tab -->
+      <div id="ctab-repeaters" class="hidden">
+        <div class="section-header">
+          <h3>Repeaters</h3>
+          <button type="button" class="btn-primary" onclick="openAddRepeaterModal()">+ Add Repeater</button>
+        </div>
+        <p class="hint">Repeaters extend wireless coverage. They appear in the Monitor but never generate calls.</p>
+        <div id="repeatersList" class="config-cards"></div>
+      </div>
+
+      <!-- Monitor sub-tab -->
+      <div id="ctab-monitor" class="hidden">
+        <div class="monitor-actions">
+          <label class="toggle-row">
+            <input type="checkbox" id="monLoggingEnabled" />
+            <span>Enable logging</span>
+          </label>
+          <label class="toggle-row">
+            <input type="checkbox" id="monAutoScroll" checked />
+            <span>Auto-scroll</span>
+          </label>
+          <label class="toggle-row">
+            <input type="checkbox" id="monShowHex" />
+            <span>Show hex</span>
+          </label>
+          <label class="toggle-row">
+            <input type="checkbox" id="monCallsOnly" />
+            <span>Calls only</span>
+          </label>
+          <label class="toggle-row">
+            <span>Device ID:</span>
+            <input type="text" id="monDeviceFilter" placeholder="filter by ID…" title="Filter by device ID" oninput="refreshMonitorLog()" style="width:120px;padding:2px 6px;border:1px solid var(--border);border-radius:4px;background:var(--bg-secondary);color:var(--text)" />
+          </label>
+          <button type="button" class="btn-secondary btn-sm" onclick="clearMonitorLog()">Clear</button>
+        </div>
+        <div class="monitor-layout">
+          <div class="monitor-log-wrap">
+            <div class="monitor-log-header">
+              <span>Raw Coordinator Output</span>
+              <span class="badge badge-neutral" id="monLineCount">0 lines</span>
+            </div>
+            <div class="monitor-log" id="monitorLog">
+              <div class="mon-empty">Logging disabled — enable above to capture frames.</div>
+            </div>
+          </div>
+          <div class="monitor-inspector">
+            <div class="monitor-log-header">Selected Frame</div>
+            <div id="monInspector" class="inspector-body">
+              <p class="hint">Click a log line to inspect it.</p>
+            </div>
+            <div class="monitor-log-header monitor-log-header--spaced">Live Statistics</div>
+            <div class="monitor-stats">
+              <div class="mstat"><span id="mstatTotal">0</span><small>Total frames</small></div>
+              <div class="mstat"><span id="mstatCalls">0</span><small>Activations</small></div>
+              <div class="mstat"><span id="mstatDevices">0</span><small>Unique IDs</small></div>
+              <div class="mstat"><span id="mstatUnknown">0</span><small>Unparsed</small></div>
+            </div>
+            <div class="monitor-log-header monitor-log-header--spaced">Seen Device IDs</div>
+            <div id="monSeenDevices" class="seen-devices"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification Rules -->
+    <div class="settings-panel hidden" id="stab-rules">
+      <div class="section-header">
+        <h3>Notification Rules</h3>
+        <button class="btn-primary" onclick="openRuleModal()">+ Add Rule</button>
+      </div>
+
+      <!-- Template variable reference -->
+      <details class="var-ref-box">
+        <summary>Template Variables — click to expand</summary>
+        <p>Use <code>{variable}</code> tokens in any <strong>message</strong>, <strong>subject</strong>, or <strong>body</strong> field inside Action Config JSON. Unknown variables are left as-is. All variables are available on both new-alarm and cleared-alarm rules.</p>
+        <table class="var-table">
+          <thead><tr><th>Variable</th><th>Example output</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td colspan="3" class="var-table-group">Device &amp; Location</td></tr>
+            <tr><td><code>{device_name}</code></td><td>101 Bath</td><td>Name of the device that fired (includes AUX label if applicable)</td></tr>
+            <tr><td><code>{device_id}</code></td><td>A1B2C3D4</td><td>Raw device identifier / serial</td></tr>
+            <tr><td><code>{location}</code></td><td>Room 101</td><td>Location field set on the device</td></tr>
+            <tr><td><code>{device_type}</code></td><td>pendant</td><td>Device type (pendant, pull-cord, etc.)</td></tr>
+            <tr><td><code>{vendor_type}</code></td><td>innovonics</td><td>Vendor / protocol of the device</td></tr>
+            <tr><td colspan="3" class="var-table-group">Grouping</td></tr>
+            <tr><td><code>{apartment}</code></td><td>Apt 101</td><td>Apartment / unit the device belongs to</td></tr>
+            <tr><td><code>{area}</code></td><td>North Wing</td><td>Area / floor / building the device belongs to</td></tr>
+            <tr><td colspan="3" class="var-table-group">Call Details</td></tr>
+            <tr><td><code>{priority}</code></td><td>urgent</td><td>Call priority in lowercase</td></tr>
+            <tr><td><code>{PRIORITY}</code></td><td>URGENT</td><td>Call priority in uppercase</td></tr>
+            <tr><td><code>{event}</code></td><td>NEW CALL / CLEARED</td><td>Whether this notification is for a new alarm or a cleared alarm</td></tr>
+            <tr><td><code>{status}</code></td><td>active / cleared</td><td>Raw call status at dispatch time</td></tr>
+            <tr><td><code>{call_id}</code></td><td>42</td><td>Internal call record ID</td></tr>
+            <tr><td><code>{timestamp}</code></td><td>2025-06-01T14:32:00+00:00</td><td>UTC ISO-8601 timestamp when the call was created</td></tr>
+            <tr><td colspan="3" class="var-table-group">Cleared-alarm specific</td></tr>
+            <tr><td><code>{cleared_at}</code></td><td>2025-06-01T14:45:00+00:00</td><td>UTC ISO-8601 timestamp when the alarm was cleared (empty on new-alarm rules)</td></tr>
+            <tr><td><code>{acknowledged_by}</code></td><td>Jane Smith</td><td>Staff name who acknowledged the call (empty if not acknowledged before clear)</td></tr>
+            <tr><td><code>{acknowledged_at}</code></td><td>2025-06-01T14:40:00+00:00</td><td>UTC ISO-8601 timestamp of acknowledgement (empty if not acknowledged)</td></tr>
+          </tbody>
+        </table>
+        <p class="hint"><strong>New alarm example:</strong> <code>{"recipients":"nurse@example.com","subject":"{apartment} — {PRIORITY} Alert","body":"{device_name} at {location}\nPriority: {priority}\nTime: {timestamp}"}</code></p>
+        <p class="hint"><strong>Cleared alarm example:</strong> <code>{"message":"CLEARED: {device_name} ({apartment}) — acked by {acknowledged_by}"}</code></p>
+      </details>
+
+      <div id="rulesList" class="config-cards"></div>
+    </div>
+
+    <!-- Users -->
+    <!-- WANDER SETTINGS (Roam Alert + AeroScout) -->
+    <div class="settings-panel hidden" id="stab-roamalert">
+
+      <!-- ── Roam Alert section ── -->
+      <h3 class="wander-section-heading">Roam Alert</h3>
+      <p class="hint ra-settings-hint">Each network controller is a Lantronix/MOXA serial-to-Ethernet adapter connected to a Roam Alert RS-485 bus.</p>
+
+      <!-- Networks (one TCP endpoint = one RS-485 bus) -->
+      <div class="section-header">
+        <h4>Network Controllers</h4>
+        <button type="button" class="btn-primary" onclick="openRaNetworkModal()">+ Add Network</button>
+      </div>
+      <div id="raNetworksList" class="config-cards"></div>
+
+      <!-- Door controllers -->
+      <div class="section-header ra-section-gap">
+        <h4>Door Controllers</h4>
+        <button type="button" class="btn-primary" onclick="openRaDoorModal()">+ Add Door</button>
+      </div>
+      <div id="raDoorsList" class="config-cards"></div>
+
+      <!-- Wander tags -->
+      <div class="section-header ra-section-gap">
+        <h4>Wander Tags</h4>
+        <button type="button" class="btn-primary" onclick="openRaTagModal()">+ Add Tag</button>
+      </div>
+      <div id="raTagsList" class="config-cards"></div>
+
+      <!-- Keypad codes -->
+      <div class="section-header ra-section-gap">
+        <h4>Keypad Access Codes</h4>
+        <button type="button" class="btn-primary" onclick="openRaCodeModal()">+ Add Code</button>
+      </div>
+      <p class="hint ra-settings-hint">Program access codes into door controller keypads. The exact code-programming byte sequence should be verified against your specific hardware revision.</p>
+      <div id="raCodesList" class="config-cards"></div>
+
+      <div class="ra-apply-row">
+        <button type="button" class="btn-secondary" onclick="reloadRaListener()">Apply &amp; Reload Listener</button>
+      </div>
+
+      <!-- ── AeroScout section ── -->
+      <hr class="wander-section-divider" />
+      <h3 class="wander-section-heading">AeroScout WanderGuard Blue</h3>
+      <p class="hint ra-settings-hint">
+        Connect to an AeroScout Location Engine (ALE) for WanderGuard Blue integration.
+        Port 1411 is the standard ALE TCP interface. This integration is under active
+        development — use the <strong>Wander Management → WanderGuard Blue</strong> page
+        to observe raw protocol data and assist reverse-engineering.
+      </p>
+
+      <div class="ale-status-settings-row">
+        <span class="ale-status-badge" id="aleStatusBadgeSettings">Disconnected</span>
+        <button type="button" class="btn-secondary btn-sm" onclick="showPage('roam-alert');showWanderTab('ale')">Open WanderGuard Blue</button>
+      </div>
+
+      <form class="settings-form" onsubmit="saveAeroscoutConfig(event)">
+        <div class="form-row">
+          <label>Host / IP</label>
+          <input type="text" id="aleHost" placeholder="10.10.10.60" />
+        </div>
+        <div class="form-row">
+          <label>Port</label>
+          <input type="number" id="alePort" value="1411" min="1" max="65535" title="ALE TCP port" />
+        </div>
+        <div class="form-row">
+          <label>Username</label>
+          <input type="text" id="aleUsername" placeholder="Admin" />
+        </div>
+        <div class="form-row">
+          <label>Password</label>
+          <input type="password" id="alePassword" placeholder="Enter to update…" autocomplete="new-password" />
+        </div>
+        <div class="form-row">
+          <label>Enabled</label>
+          <input type="checkbox" id="aleEnabled" title="Enable AeroScout ALE connection" />
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Save AeroScout</button>
+          <button type="button" class="btn-secondary" onclick="reloadAleListener()">Apply &amp; Reconnect</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="settings-panel hidden" id="stab-users">
+      <div class="section-header">
+        <h3>Staff Users</h3>
+        <button type="button" class="btn-primary" onclick="openUserModal()">+ Add User</button>
+      </div>
+      <div class="form-row auth-toggle-row">
+        <label for="authRequiredToggle">Require Login</label>
+        <input type="checkbox" id="authRequiredToggle" onchange="saveAuthRequired(this.checked)" title="Require users to log in before accessing the system" />
+      </div>
+      <p class="hint auth-hint">
+        When enabled, users must log in with a username and password before accessing the system.
+      </p>
+      <div id="usersList" class="config-cards"></div>
+    </div>
+  </section>
+
+  <!-- ======================== MESSAGES PAGE ======================== -->
+  <section class="page hidden" id="page-messages">
+    <div class="section-header">
+      <h2>Staff Messages</h2>
+    </div>
+    <div class="chat-window">
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-empty" id="chatEmpty">No messages yet.</div>
+      </div>
+      <div class="chat-compose">
+        <input type="text" id="chatInput" class="chat-input" placeholder="Type a message…" maxlength="500"
+               onkeydown="if(event.key==='Enter')sendStaffMessage()" />
+        <button type="button" class="btn-primary" onclick="sendStaffMessage()">Send</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================================================
+     MODALS
+     ============================================================ -->
+
+<!-- Roam Alert — Add/Edit Network -->
+<div class="modal-overlay hidden" id="raNetworkModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="raNetworkModalTitle">Add Network Controller</h3>
+      <button type="button" class="modal-close" onclick="closeModal('raNetworkModal')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="raNetworkEditId" />
+      <div class="form-row"><label>Name</label><input type="text" id="raNetworkName" placeholder="e.g. East Wing Bus" /></div>
+      <div class="form-row"><label>Host / IP</label><input type="text" id="raNetworkHost" placeholder="10.0.0.50" /></div>
+      <div class="form-row"><label>Port</label><input type="number" id="raNetworkPort" value="10001" /></div>
+      <div class="form-row"><label>Enabled</label><input type="checkbox" id="raNetworkEnabled" title="Enable this network controller" checked /></div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-secondary" onclick="closeModal('raNetworkModal')">Cancel</button>
+      <button type="button" class="btn-primary" onclick="submitRaNetwork()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Roam Alert — Add/Edit Door -->
+<div class="modal-overlay hidden" id="raDoorModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="raDoorModalTitle">Add Door Controller</h3>
+      <button type="button" class="modal-close" onclick="closeModal('raDoorModal')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="raDoorEditId" />
+      <div class="form-row"><label>Network</label><select id="raDoorNetworkId" title="Select network controller"></select></div>
+      <div class="form-row"><label>Name</label><input type="text" id="raDoorName" placeholder="e.g. Front Entrance" /></div>
+      <div class="form-row"><label>Serial Number</label><input type="text" id="raDoorSerial" placeholder="6-digit serial e.g. 123456" /></div>
+      <div class="form-row"><label>Location</label><input type="text" id="raDoorLocation" placeholder="Optional" /></div>
+      <div class="form-row"><label>Monitor Sanity</label><input type="checkbox" id="raDoorSanity" title="Alert when door controller goes offline" checked /></div>
+      <div class="form-row"><label>Enabled</label><input type="checkbox" id="raDoorEnabled" title="Enable this door controller" checked /></div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-secondary" onclick="closeModal('raDoorModal')">Cancel</button>
+      <button type="button" class="btn-primary" onclick="submitRaDoor()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Roam Alert — Add/Edit Tag -->
+<div class="modal-overlay hidden" id="raTagModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="raTagModalTitle">Add Wander Tag</h3>
+      <button type="button" class="modal-close" onclick="closeModal('raTagModal')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="raTagEditId" />
+      <div class="form-row"><label>Tag Serial</label><input type="text" id="raTagSerial" placeholder="hex serial from reader" /></div>
+      <div class="form-row"><label>Resident Name</label><input type="text" id="raTagResident" placeholder="e.g. John Smith" /></div>
+      <div class="form-row"><label>Apartment</label><select id="raTagApartment" title="Link to apartment"><option value="">— None —</option></select></div>
+      <div class="form-row"><label>Enabled</label><input type="checkbox" id="raTagEnabled" title="Enable this tag" checked /></div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-secondary" onclick="closeModal('raTagModal')">Cancel</button>
+      <button type="button" class="btn-primary" onclick="submitRaTag()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- AeroScout — Add / Edit Wander Tag -->
+<div class="modal-overlay hidden" id="aleTagModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="aleTagModalTitle">Add / Pre-seed Tag</h3>
+      <button type="button" class="modal-close" onclick="closeModal('aleTagModal')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="aleTagEditMac" />
+      <div class="form-row" id="aleTagMacRow">
+        <label>MAC Address</label>
+        <input type="text" id="aleTagMac" placeholder="e.g. 000CCC1A0F75 or 00:0C:CC:1A:0F:75" />
+      </div>
+      <div class="form-row">
+        <label>Strap Address</label>
+        <input type="text" id="aleTagStrap" placeholder="ID printed on strap" />
+      </div>
+      <div class="form-row">
+        <label>Resident Name</label>
+        <input type="text" id="aleTagResident" placeholder="e.g. John Smith" />
+      </div>
+      <div class="form-row">
+        <label>Apartment</label>
+        <select id="aleTagApartment" title="Link to apartment"><option value="">— None —</option></select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-secondary" onclick="closeModal('aleTagModal')">Cancel</button>
+      <button type="button" class="btn-primary" onclick="submitAleTag()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Roam Alert — Add Keypad Code -->
+<div class="modal-overlay hidden" id="raCodeModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Add Keypad Code</h3>
+      <button type="button" class="modal-close" onclick="closeModal('raCodeModal')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row"><label>Door</label><select id="raCodeDoorId" title="Select door controller"></select></div>
+      <div class="form-row"><label>Slot #</label><input type="number" id="raCodeSlot" value="1" min="1" max="100" /></div>
+      <div class="form-row"><label>Code</label><input type="text" id="raCodeValue" placeholder="Up to 6 digits" maxlength="6" /></div>
+      <div class="form-row"><label>Label</label><input type="text" id="raCodeLabel" placeholder="Optional description" /></div>
+      <div class="form-row"><label>Type</label>
+        <select id="raCodeType">
+          <option value="access">Access</option>
+          <option value="duress">Duress</option>
+          <option value="manager">Manager</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-secondary" onclick="closeModal('raCodeModal')">Cancel</button>
+      <button type="button" class="btn-primary" onclick="submitRaCode()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Acknowledge modal -->
+<div class="modal-overlay hidden" id="ackModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Acknowledge Call</h3>
+      <button class="modal-close" onclick="closeModal('ackModal')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="ackCallId" />
+      <div class="form-row">
+        <label>Staff Name</label>
+        <select id="ackActor"></select>
+      </div>
+      <div class="form-row">
+        <label>Notes (optional)</label>
+        <input type="text" id="ackNotes" placeholder="Optional notes…" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('ackModal')">Cancel</button>
+      <button class="btn-primary" onclick="submitAck()">Acknowledge</button>
+    </div>
+  </div>
+</div>
+
+<!-- Clear modal -->
+<div class="modal-overlay hidden" id="clearModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Clear Call</h3>
+      <button class="modal-close" onclick="closeModal('clearModal')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="clearCallId" />
+      <div class="form-row">
+        <label>Staff Name</label>
+        <select id="clearActor"></select>
+      </div>
+      <div class="form-row">
+        <label>Notes (optional)</label>
+        <input type="text" id="clearNotes" placeholder="Optional notes…" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('clearModal')">Cancel</button>
+      <button class="btn-danger" onclick="submitClear()">Clear Call</button>
+    </div>
+  </div>
+</div>
+
+<!-- Test call injection -->
+<div class="modal-overlay hidden" id="injectModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Inject Test Call</h3>
+      <button class="modal-close" onclick="closeModal('injectModal')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <label>Device ID</label>
+        <select id="injectDeviceId"></select>
+      </div>
+      <div class="form-row">
+        <label>Raw Data (optional)</label>
+        <input type="text" id="injectRaw" placeholder="manual-test" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('injectModal')">Cancel</button>
+      <button class="btn-primary" onclick="submitInject()">Trigger Call</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add / Edit Device -->
+<div class="modal-overlay hidden" id="deviceModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="deviceModalTitle">Register Device</h3>
+      <button type="button" class="modal-close" onclick="closeModal('deviceModal')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="devEditId" />
+      <div class="form-row" id="devIdRow">
+        <label>Device ID</label>
+        <div class="input-with-btn">
+          <input type="text" id="devId" placeholder="e.g. 001234" />
+          <button type="button" class="btn-detect" id="btnDetect" onclick="startLearnMode()" title="Activate the device now to auto-detect its ID">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Auto-Detect
+          </button>
+        </div>
+      </div>
+      <div class="learn-status hidden" id="learnStatus">
+        <div class="learn-spinner"></div>
+        <span id="learnStatusText">Waiting — activate the device now…</span>
+        <button type="button" class="btn-secondary btn-sm" onclick="stopLearnMode()">Cancel</button>
+      </div>
+      <div class="form-row"><label>Name</label><input type="text" id="devName" placeholder="Room 101 Pull Cord" /></div>
+      <div class="form-row">
+        <label>Type</label>
+        <select id="devType">
+          <option value="pendant">Pendant</option>
+          <option value="universal_tx">Universal TX</option>
+          <option value="bed">Bed</option>
+          <option value="bath">Bathroom</option>
+<!--          <option value="staff">Staff Badge</option>
+          <option value="repeater">Repeater</option> -->
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Vendor Type</label>
+        <select id="devVendorType">
+          <option value="innovonics">Innovonics</option>
+          <option value="arial_legacy">Arial Legacy</option>
+          <option value="arial_900">Arial 900</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Priority</label>
+        <select id="devPriority">
+          <option value="normal">Normal</option>
+          <option value="urgent">Urgent</option>
+          <option value="emergency">Emergency</option>
+        </select>
+      </div>
+      <div class="form-row" id="auxLabelRow" style="display:none">
+        <label>AUX Label</label>
+        <input type="text" id="devAuxLabel" placeholder="AUX" maxlength="32" />
+      </div>
+      <div class="form-row">
+        <label>Location / Apt</label>
+        <input type="text" id="devApartmentName" list="devApartmentList" placeholder="Unit number or apartment name" autocomplete="off" />
+        <datalist id="devApartmentList"></datalist>
+      </div>
+      <div class="form-row">
+        <label>Area</label>
+        <input type="text" id="devAreaName" list="devAreaList" placeholder="Floor 1 / Wing A (optional)" autocomplete="off" />
+        <datalist id="devAreaList"></datalist>
+      </div>
+      <div class="form-row">
+        <label>Device Relay</label>
+        <select id="devRelayConfigId">
+          <option value="">— None —</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-secondary" onclick="closeModal('deviceModal')">Cancel</button>
+      <button type="button" class="btn-primary" id="devSubmitBtn" onclick="submitDevice()">Register</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Pager -->
+<div class="modal-overlay hidden" id="pagerModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="pagerModalTitle">Add Pager</h3>
+      <button class="modal-close" onclick="closeModal('pagerModal')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="pagerEditId" />
+      <div class="form-row"><label>Name</label><input type="text" id="pagerName" placeholder="Main Pager" /></div>
+      <div class="form-row"><label>Host / IP</label><input type="text" id="pagerHost" /></div>
+      <div class="form-row"><label>Port</label><input type="number" id="pagerPort" value="9000" /></div>
+      <div class="form-row">
+        <label>Protocol</label>
+        <select id="pagerProto">
+          <option value="TAP">TAP</option>
+          <option value="COMP2">COMP2</option>
+          <option value="WAVEWARE">WaveWare</option>
+        </select>
+      </div>
+      <div class="form-row"><label>Default Capcode</label><input type="text" id="pagerCapcode" placeholder="1885" /></div>
+      <div class="form-row"><label>Enabled</label><input type="checkbox" id="pagerEnabled" checked /></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('pagerModal')">Cancel</button>
+      <button class="btn-primary" onclick="submitPager()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Relay -->
+<div class="modal-overlay hidden" id="relayModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="relayModalTitle">Add Dome Light Controller</h3>
+      <button class="modal-close" onclick="closeModal('relayModal')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="relayEditId" />
+      <div class="form-row"><label>Name</label><input type="text" id="relayName" placeholder="Corridor Light 1" /></div>
+      <div class="form-row">
+        <label>Controller Type</label>
+        <select id="relayType">
+          <option value="rcm">RCM (Telnet)</option>
+          <option value="esp">ESP (HTTP)</option>
+        </select>
+      </div>
+      <div class="form-row"><label>Host / IP</label><input type="text" id="relayHost" /></div>
+      <div class="form-row"><label>Port</label><input type="number" id="relayPort" value="23" /></div>
+      <div class="form-row"><label>Relay Number</label><input type="number" id="relayNumber" value="1" /></div>
+      <div class="form-row"><label>Enabled</label><input type="checkbox" id="relayEnabled" checked /></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('relayModal')">Cancel</button>
+      <button class="btn-primary" onclick="submitRelay()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Input -->
+<div class="modal-overlay hidden" id="inputModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="inputModalTitle">Add Input Trigger</h3>
+      <button class="modal-close" onclick="closeModal('inputModal')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="inputEditId" />
+      <div class="form-row"><label>Name</label><input type="text" id="inputName" placeholder="ESP Input 1" /></div>
+      <div class="form-row">
+        <label>Input Type</label>
+        <select id="inputType">
+          <option value="esp">ESP (HTTP webhook)</option>
+        </select>
+      </div>
+      <div class="form-row"><label>Host / IP</label><input type="text" id="inputHost" placeholder="192.168.1.50" /></div>
+      <div class="form-row"><label>Port</label><input type="number" id="inputPort" value="80" /></div>
+      <div class="form-row"><label>Input Number</label><input type="number" id="inputNumber" value="1" min="1" /></div>
+      <div class="form-row"><label>Sensor Name (optional)</label><input type="text" id="inputInputName" placeholder="input-1" /></div>
+      <div class="form-row"><label>Active High</label><input type="checkbox" id="inputActiveHigh" checked /></div>
+      <div class="form-row"><label>Enabled</label><input type="checkbox" id="inputEnabled" checked /></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('inputModal')">Cancel</button>
+      <button class="btn-primary" onclick="submitInput()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Rule -->
+<div class="modal-overlay hidden" id="ruleModal">
+  <div class="modal modal-wide">
+    <div class="modal-header">
+      <h3 id="ruleModalTitle">Add Notification Rule</h3>
+      <button class="modal-close" onclick="closeModal('ruleModal')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="ruleEditId" />
+      <div class="form-row"><label>Rule Name</label><input type="text" id="ruleName" placeholder="Emergency Page All" /></div>
+      <div class="form-row">
+        <label>Device Filter</label>
+        <input type="text" id="ruleDeviceFilter" value="all" placeholder="all  or  1234,5678" />
+      </div>
+      <div class="form-row">
+        <label>Priority Filter</label>
+        <select id="rulePriorityFilter">
+          <option value="all">All Priorities</option>
+          <option value="normal">Normal</option>
+          <option value="urgent">Urgent</option>
+          <option value="emergency">Emergency</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Area Filter</label>
+        <select id="ruleAreaFilter">
+          <option value="all">All Areas</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Notify On</label>
+        <select id="ruleNotifyOn">
+          <option value="call">New alarm only</option>
+          <option value="clear">Alarm cleared only</option>
+          <option value="both">Both (alarm + cleared)</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Action Type</label>
+        <select id="ruleActionType" onchange="updateRuleConfigHint()">
+          <option value="email">Email</option>
+          <option value="page">Pager</option>
+          <option value="relay">Relay / Dome Light</option>
+          <option value="telegram">Telegram</option>
+          <option value="twilio">Twilio SMS</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Action Config (JSON)</label>
+        <textarea id="ruleActionConfig" rows="5" placeholder='{"recipients":"nurse@hospital.com"}'></textarea>
+      </div>
+      <div class="hint" id="ruleConfigHint">
+        Email: {"recipients":"a@b.com","subject":"optional","body":"optional"}
+      </div>
+      <div class="hint hint-vars">
+        Use <code>{variable}</code> tokens in message/subject/body — e.g. <code>{device_name}</code>, <code>{apartment}</code>, <code>{area}</code>, <code>{PRIORITY}</code>, <code>{location}</code>, <code>{timestamp}</code>. See the full variable list above the rules table.
+      </div>
+      <div class="form-row"><label>Enabled</label><input type="checkbox" id="ruleEnabled" checked /></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('ruleModal')">Cancel</button>
+      <button class="btn-primary" onclick="submitRule()">Save Rule</button>
+    </div>
+  </div>
+</div>
+
+<!-- Login overlay -->
+<div class="modal-overlay hidden" id="loginOverlay">
+  <div class="modal modal-narrow">
+    <div class="modal-header">
+      <h3>Community Call — Sign In</h3>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <label for="loginUsername">Username</label>
+        <input type="text" id="loginUsername" autocomplete="username" placeholder="admin" />
+      </div>
+      <div class="form-row">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" autocomplete="current-password" placeholder="Password" />
+      </div>
+      <p class="hint login-error hidden" id="loginError"></p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-primary btn-full" onclick="submitLogin()">Sign In</button>
+    </div>
+  </div>
+</div>
+
+<!-- Staff Emergency -->
+<div class="modal-overlay hidden" id="emergencyModal">
+  <div class="modal modal-narrow">
+    <div class="modal-header modal-header-danger">
+      <h3>
+        <svg class="emergency-modal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Staff Emergency
+      </h3>
+      <button type="button" class="modal-close" onclick="closeModal('emergencyModal')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <p class="emergency-modal-hint">Describe what's happening. Your name and this message will be sent to all connected staff immediately.</p>
+      <textarea id="emergencyMessage" class="emergency-textarea" rows="4" placeholder="Describe the emergency…" maxlength="300"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-secondary" onclick="closeModal('emergencyModal')">Cancel</button>
+      <button type="button" class="btn-danger" onclick="submitStaffEmergency()">Send Emergency Alert</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add / Edit User -->
+<div class="modal-overlay hidden" id="userModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="userModalTitle">Add Staff User</h3>
+      <button type="button" class="modal-close" onclick="closeModal('userModal')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="userEditId" />
+      <div class="form-row">
+        <label for="newUsername">Username</label>
+        <input type="text" id="newUsername" autocomplete="off" />
+      </div>
+      <div class="form-row">
+        <label for="newPassword">Password</label>
+        <input type="password" id="newPassword" autocomplete="new-password" placeholder="Leave blank to keep unchanged" />
+      </div>
+      <div class="form-row">
+        <label for="newRole">Role</label>
+        <select id="newRole">
+          <option value="viewer">Viewer (Dashboard &amp; History only)</option>
+          <option value="staff">Staff</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label for="newActive">Active</label>
+        <input type="checkbox" id="newActive" title="Whether this user can log in" checked />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-secondary" onclick="closeModal('userModal')">Cancel</button>
+      <button type="button" class="btn-primary" id="userSubmitBtn" onclick="submitUser()">Add User</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add / Edit Apartment -->
+<div class="modal-overlay hidden" id="apartmentModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="apartmentModalTitle">Add Apartment</h3>
+      <button class="modal-close" onclick="closeModal('apartmentModal')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="aptEditId" />
+      <div class="form-row"><label>Name</label><input type="text" id="aptName" placeholder="Apt 101" /></div>
+      <div class="form-row">
+        <label>Area</label>
+        <input type="text" id="aptAreaName" list="aptAreaList" placeholder="Floor 1 / Wing A (optional)" autocomplete="off" />
+        <datalist id="aptAreaList"></datalist>
+      </div>
+      <div class="form-row">
+        <label>Dome Light Relay</label>
+        <select id="aptRelayConfigId">
+          <option value="">— None —</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('apartmentModal')">Cancel</button>
+      <button class="btn-primary" onclick="submitApartment()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Batch Add Relay Controllers -->
+<div class="modal-overlay hidden" id="relayBatchModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Batch Add Controllers</h3>
+      <button class="modal-close" onclick="closeModal('relayBatchModal')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row"><label>Name Prefix</label><input type="text" id="batchNamePrefix" placeholder="Floor 1 Controller" /></div>
+      <div class="form-row">
+        <label>Controller Type</label>
+        <select id="batchRelayType">
+          <option value="rcm">RCM (Telnet)</option>
+          <option value="esp">ESP (HTTP)</option>
+        </select>
+      </div>
+      <div class="form-row"><label>Host / IP</label><input type="text" id="batchRelayHost" /></div>
+      <div class="form-row"><label>Port</label><input type="number" id="batchRelayPort" value="23" /></div>
+      <div class="form-row"><label>Number of Relays</label><input type="number" id="batchRelayCount" value="8" min="1" max="64" /></div>
+      <p class="hint">Creates one entry per relay channel, named "Prefix 1", "Prefix 2", etc.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('relayBatchModal')">Cancel</button>
+      <button class="btn-primary" onclick="submitBatchRelay()">Create All</button>
+    </div>
+  </div>
+</div>
+
+<!-- Batch Add Inputs -->
+<div class="modal-overlay hidden" id="inputBatchModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Batch Add Inputs</h3>
+      <button class="modal-close" onclick="closeModal('inputBatchModal')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row"><label>Alarm Name Prefix</label><input type="text" id="batchInputNamePrefix" placeholder="Panic Alarm" /></div>
+      <div class="form-row"><label>Host / IP</label><input type="text" id="batchInputHost" /></div>
+      <div class="form-row"><label>Port</label><input type="number" id="batchInputPort" value="80" /></div>
+      <div class="form-row"><label>Starting Input Number</label><input type="number" id="batchInputStartNumber" value="1" min="1" /></div>
+      <div class="form-row"><label>Number of Inputs</label><input type="number" id="batchInputCount" value="6" min="1" max="64" /></div>
+      <div class="form-row"><label>Sensor Name Prefix</label><input type="text" id="batchInputSensorPrefix" value="input-" placeholder="input-" /></div>
+      <div class="form-row"><label>Active High</label><input type="checkbox" id="batchInputActiveHigh" checked /></div>
+      <p class="hint">Creates "Prefix 1..N" and maps sensor names like input-1..input-N (or your custom prefix).</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('inputBatchModal')">Cancel</button>
+      <button class="btn-primary" onclick="submitBatchInput()">Create All</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add / Edit Area -->
+<div class="modal-overlay hidden" id="areaModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="areaModalTitle">Add Area</h3>
+      <button class="modal-close" onclick="closeModal('areaModal')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="areaEditId" />
+      <div class="form-row"><label>Name</label><input type="text" id="areaName" placeholder="Floor 1 / Wing A" /></div>
+      <div class="form-row">
+        <label>Area Relay</label>
+        <select id="areaRelayConfigId">
+          <option value="">— None —</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('areaModal')">Cancel</button>
+      <button class="btn-primary" onclick="submitArea()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast notifications -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Alert sound (data URI beep) -->
+<audio id="alertSound" preload="auto">
+  <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbz5NaHC5sn+Pv4ataGipomODn2ZhVFy1vmN/k1o5LFCxzmtfk0oZCEB90ndbjy31EDSR9m9jhy3Q7BxuBm9nixmk0CR2ImtjgwnAuBh2LnNvhvWktCiORmt7ftnAoBiCYnN3ds2MkBiKent7YrmIfBiShn97Sq1odBCakoN7MoxQZAymnod7HmgwVAC6sqN7CkwIQADKxreC8igAKADi3suG3gwAFAD29t+KzhAABAEPCvOOsgwAAAA==" type="audio/wav">
+</audio>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>

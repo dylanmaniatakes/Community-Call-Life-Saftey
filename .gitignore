@@ -1,0 +1,16 @@
+# Runtime data — do not commit
+certs/
+*.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+*.egg-info/
+
+# Editor
+.DS_Store
+*.swp

@@ -1,0 +1,6 @@
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+python-multipart>=0.0.9
+pyserial>=3.5
+aiofiles>=23.2.1
+pywebpush>=2.0.0
