@@ -1,6 +1,7 @@
 # Runtime data — do not commit
 certs/
 *.db
+*.env
 
 # Python
 __pycache__/
