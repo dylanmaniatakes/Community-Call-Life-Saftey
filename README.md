@@ -247,7 +247,7 @@ Devices → Add Device, or use **Learn Mode** to capture the serial number autom
 | Name | Human-readable label shown on dashboard |
 | Location | Room or area description |
 | Device Type | Pendant, Bath Pull Cord, Bed Pull Cord, Universal TX, Reed Switch, etc. |
-| Vendor Type | `innovonics` (standard), `arial_legacy` (Arial pull cords), `arial_900` |
+| Vendor Type | `innovonics` (standard), `arial_legacy` (Arial/Mycall pull cords), `arial_900` (Arial New Cords) |
 | Priority | Normal, Urgent, Emergency |
 | Apartment | Optional — groups the device under an apartment/unit |
 | Area | Optional — groups the device under a floor/wing |
